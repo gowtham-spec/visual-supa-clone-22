@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,9 +7,11 @@ import HeaderLogo from './HeaderLogo';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAdmin } from '@/hooks/useAdmin';
 import { supabase } from '@/integrations/supabase/client';
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [clickedItem, setClickedItem] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const {
@@ -19,12 +22,14 @@ const Header = () => {
     user,
     isAdmin
   } = useAdmin();
+
   const isActivePath = (path: string) => {
     if (path === '/') {
       return location.pathname === '/';
     }
     return location.pathname.startsWith(path);
   };
+
   const scrollToSection = (sectionId: string) => {
     if (location.pathname !== '/') {
       // Navigate to home page first, then scroll
@@ -47,9 +52,11 @@ const Header = () => {
     }
     setIsMenuOpen(false);
   };
+
   const handleAboutClick = () => {
     scrollToSection('about-section');
   };
+
   const handleReviewsClick = () => {
     if (location.pathname === '/reviews') {
       window.scrollTo({
@@ -61,6 +68,7 @@ const Header = () => {
     }
     setIsMenuOpen(false);
   };
+
   const handleNewsClick = () => {
     navigate('/news');
     setTimeout(() => {
@@ -71,10 +79,23 @@ const Header = () => {
     }, 100);
     setIsMenuOpen(false);
   };
+
+  const handleCareersClick = () => {
+    navigate('/careers');
+    setIsMenuOpen(false);
+  };
+
+  const handleNavItemClick = (itemName: string, action: () => void) => {
+    setClickedItem(itemName);
+    setTimeout(() => setClickedItem(null), 300);
+    action();
+  };
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setIsUserMenuOpen(false);
   };
+
   const navItems = [{
     name: 'Home',
     path: '/',
@@ -104,19 +125,58 @@ const Header = () => {
     path: '/reviews',
     action: handleReviewsClick
   }, {
+    name: 'Careers',
+    path: '/careers',
+    action: handleCareersClick
+  }, {
     name: 'Contact',
     path: '/#contact',
     action: () => scrollToSection('contact-section')
   }];
+
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
+
   const getUserDisplayName = () => {
     if (user?.email) {
       return user.email.split('@')[0];
     }
     return 'User';
   };
+
+  const getNavButtonStyle = (itemName: string) => {
+    const isClicked = clickedItem === itemName;
+    const baseStyle = `
+      relative px-3 py-2 rounded-md transition-all duration-300 ease-in-out
+      focus:outline-none focus:ring-2 focus:ring-blue-500
+    `;
+    
+    if (isClicked) {
+      const boxColor = theme === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+      const textColor = theme === 'light' ? '#3B82F6' : '#60A5FA';
+      return `${baseStyle} text-sm font-medium transition-colors duration-200`;
+    }
+    
+    return `${baseStyle} text-sm font-medium transition-colors duration-200 ${
+      theme === 'light' ? 'text-gray-700 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'
+    }`;
+  };
+
+  const getClickAnimation = (itemName: string) => {
+    if (clickedItem === itemName) {
+      const boxColor = theme === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+      const textColor = theme === 'light' ? '#3B82F6' : '#60A5FA';
+      return {
+        backgroundColor: boxColor,
+        color: textColor,
+        transform: 'scale(1.02)',
+        boxShadow: `0 0 0 2px ${boxColor}`
+      };
+    }
+    return {};
+  };
+
   return <header className={`fixed top-0 left-0 right-0 z-50 ${theme === 'light' ? 'bg-white/95 backdrop-blur-sm border-b border-gray-200' : 'bg-slate-900/95 backdrop-blur-sm border-b border-slate-700'}`}>
       <nav className="container mx-auto px-4 py-2" role="navigation" aria-label="Main navigation">
         <div className="flex items-center justify-between">
@@ -124,10 +184,18 @@ const Header = () => {
           
           {/* Desktop Navigation - Centered */}
           <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
-            <div className="flex items-center space-x-8">
-              {navItems.map(item => <button key={item.name} onClick={item.action} aria-label={`Navigate to ${item.name} section`} className="">
+            <div className="flex items-center space-x-6">
+              {navItems.map(item => (
+                <button 
+                  key={item.name} 
+                  onClick={() => handleNavItemClick(item.name, item.action)} 
+                  aria-label={`Navigate to ${item.name} section`} 
+                  className={getNavButtonStyle(item.name)}
+                  style={getClickAnimation(item.name)}
+                >
                   {item.name}
-                </button>)}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -185,9 +253,24 @@ const Header = () => {
         {/* Mobile Navigation */}
         {isMenuOpen && <div id="mobile-menu" className={`lg:hidden mt-4 pb-4 border-t ${theme === 'light' ? 'border-gray-200' : 'border-slate-700'}`} role="menu" aria-label="Mobile navigation menu">
             <div className="flex flex-col space-y-4 pt-4">
-              {navItems.map(item => <button key={item.name} onClick={item.action} role="menuitem" aria-label={`Navigate to ${item.name} section`} className={`text-sm font-medium transition-colors duration-200 text-left min-h-[44px] px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${isActivePath(item.path) ? 'text-blue-600 bg-blue-50' : theme === 'light' ? 'text-gray-700 hover:text-blue-600 hover:bg-gray-50' : 'text-gray-300 hover:text-blue-400 hover:bg-slate-800'}`}>
+              {navItems.map(item => (
+                <button 
+                  key={item.name} 
+                  onClick={() => handleNavItemClick(item.name, item.action)} 
+                  role="menuitem" 
+                  aria-label={`Navigate to ${item.name} section`} 
+                  className={`text-sm font-medium transition-all duration-300 text-left min-h-[44px] px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    isActivePath(item.path) 
+                      ? 'text-blue-600 bg-blue-50' 
+                      : theme === 'light' 
+                        ? 'text-gray-700 hover:text-blue-600 hover:bg-gray-50' 
+                        : 'text-gray-300 hover:text-blue-400 hover:bg-slate-800'
+                  }`}
+                  style={getClickAnimation(item.name)}
+                >
                   {item.name}
-                </button>)}
+                </button>
+              ))}
               
               {user ? <div className="flex flex-col space-y-2 pt-2 border-t border-gray-200">
                   <div className={`text-sm px-3 py-2 ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>
@@ -213,4 +296,5 @@ const Header = () => {
       </nav>
     </header>;
 };
+
 export default Header;
