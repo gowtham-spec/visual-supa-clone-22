@@ -48,10 +48,8 @@ const Header = () => {
 
   const handleReviewsClick = () => {
     if (location.pathname === '/reviews') {
-      // If already on reviews page, scroll to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Navigate to reviews page
       navigate('/reviews');
     }
     setIsMenuOpen(false);
@@ -59,7 +57,6 @@ const Header = () => {
 
   const handleNewsClick = () => {
     navigate('/news');
-    // Scroll to top after navigation
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);
@@ -95,7 +92,7 @@ const Header = () => {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 ${theme === 'light' ? 'bg-white/95 backdrop-blur-sm border-b border-gray-200' : 'bg-slate-900/95 backdrop-blur-sm border-b border-slate-700'}`}>
-      <nav className="container mx-auto px-4 py-2">
+      <nav className="container mx-auto px-4 py-2" role="navigation" aria-label="Main navigation">
         <div className="flex items-center justify-between">
           <HeaderLogo />
           
@@ -106,12 +103,13 @@ const Header = () => {
                 <button
                   key={item.name}
                   onClick={item.action}
-                  className={`text-sm font-medium transition-colors duration-200 ${
+                  aria-label={`Navigate to ${item.name} section`}
+                  className={`text-sm font-medium transition-colors duration-200 min-h-[44px] px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     isActivePath(item.path)
-                      ? 'text-blue-600'
+                      ? 'text-blue-600 bg-blue-50'
                       : theme === 'light'
-                      ? 'text-gray-700 hover:text-blue-600'
-                      : 'text-gray-300 hover:text-blue-400'
+                      ? 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                      : 'text-gray-300 hover:text-blue-400 hover:bg-slate-800'
                   }`}
                 >
                   {item.name}
@@ -127,12 +125,13 @@ const Header = () => {
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className={`p-2 ${theme === 'light' ? 'hover:bg-gray-100' : 'hover:bg-slate-800'}`}
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+              className={`p-3 min-h-[44px] min-w-[44px] focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'light' ? 'hover:bg-gray-100' : 'hover:bg-slate-800'}`}
             >
               {theme === 'light' ? (
-                <Moon className="h-5 w-5" />
+                <Moon className="h-5 w-5" aria-hidden="true" />
               ) : (
-                <Sun className="h-5 w-5" />
+                <Sun className="h-5 w-5" aria-hidden="true" />
               )}
             </Button>
 
@@ -141,51 +140,62 @@ const Header = () => {
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                  aria-label={`User menu for ${getUserDisplayName()}`}
+                  aria-expanded={isUserMenuOpen}
+                  aria-haspopup="menu"
+                  className={`flex items-center space-x-2 px-3 py-2 min-h-[44px] rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     theme === 'light' ? 'hover:bg-gray-100' : 'hover:bg-slate-800'
                   }`}
                 >
-                  <User className="h-4 w-4" />
+                  <User className="h-4 w-4" aria-hidden="true" />
                   <span className={`text-sm font-medium ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>
                     {getUserDisplayName()}
                   </span>
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className="h-4 w-4" aria-hidden="true" />
                 </button>
 
                 {isUserMenuOpen && (
-                  <div className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg border z-50 ${
-                    theme === 'light' ? 'bg-white border-gray-200' : 'bg-slate-800 border-slate-700'
-                  }`}>
+                  <div 
+                    className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg border z-50 ${
+                      theme === 'light' ? 'bg-white border-gray-200' : 'bg-slate-800 border-slate-700'
+                    }`}
+                    role="menu"
+                    aria-label="User account menu"
+                  >
                     <div className="py-2">
                       <Link
                         to="/profile"
                         onClick={() => setIsUserMenuOpen(false)}
-                        className={`flex items-center px-4 py-2 text-sm transition-colors ${
+                        role="menuitem"
+                        className={`flex items-center px-4 py-2 text-sm min-h-[44px] transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 ${
                           theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-300 hover:bg-slate-700'
                         }`}
                       >
-                        <Settings className="h-4 w-4 mr-2" />
-                        Profile
+                        <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
+                        Profile Settings
                       </Link>
                       {isAdmin && (
                         <Link
                           to="/admin"
                           onClick={() => setIsUserMenuOpen(false)}
-                          className={`flex items-center px-4 py-2 text-sm transition-colors ${
+                          role="menuitem"
+                          className={`flex items-center px-4 py-2 text-sm min-h-[44px] transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 ${
                             theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-300 hover:bg-slate-700'
                           }`}
                         >
-                          <Settings className="h-4 w-4 mr-2" />
+                          <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
                           Admin Dashboard
                         </Link>
                       )}
                       <button
                         onClick={handleSignOut}
-                        className={`flex items-center w-full px-4 py-2 text-sm transition-colors ${
+                        role="menuitem"
+                        aria-label="Sign out of your account"
+                        className={`flex items-center w-full px-4 py-2 text-sm min-h-[44px] transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 ${
                           theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-300 hover:bg-slate-700'
                         }`}
                       >
-                        <LogOut className="h-4 w-4 mr-2" />
+                        <LogOut className="h-4 w-4 mr-2" aria-hidden="true" />
                         Sign Out
                       </button>
                     </div>
@@ -193,8 +203,8 @@ const Header = () => {
                 )}
               </div>
             ) : (
-              <Button asChild className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-                <Link to="/auth">Sign In</Link>
+              <Button asChild className="bg-gradient-to-r from-blue-600 to-purple-600 text-white min-h-[44px] focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <Link to="/auth" aria-label="Sign in to your account">Sign In</Link>
               </Button>
             )}
           </div>
@@ -206,38 +216,49 @@ const Header = () => {
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className={`p-2 ${theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-300 hover:bg-slate-800'}`}
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+              className={`p-3 min-h-[44px] min-w-[44px] focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-300 hover:bg-slate-800'}`}
             >
               {theme === 'light' ? (
-                <Moon className="h-5 w-5" />
+                <Moon className="h-5 w-5" aria-hidden="true" />
               ) : (
-                <Sun className="h-5 w-5" />
+                <Sun className="h-5 w-5" aria-hidden="true" />
               )}
             </Button>
             
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`p-2 rounded-md ${theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-300 hover:bg-slate-800'}`}
+              aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
+              className={`p-3 min-h-[44px] min-w-[44px] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-300 hover:bg-slate-800'}`}
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className={`lg:hidden mt-4 pb-4 border-t ${theme === 'light' ? 'border-gray-200' : 'border-slate-700'}`}>
+          <div 
+            id="mobile-menu"
+            className={`lg:hidden mt-4 pb-4 border-t ${theme === 'light' ? 'border-gray-200' : 'border-slate-700'}`}
+            role="menu"
+            aria-label="Mobile navigation menu"
+          >
             <div className="flex flex-col space-y-4 pt-4">
               {navItems.map((item) => (
                 <button
                   key={item.name}
                   onClick={item.action}
-                  className={`text-sm font-medium transition-colors duration-200 text-left ${
+                  role="menuitem"
+                  aria-label={`Navigate to ${item.name} section`}
+                  className={`text-sm font-medium transition-colors duration-200 text-left min-h-[44px] px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     isActivePath(item.path)
-                      ? 'text-blue-600'
+                      ? 'text-blue-600 bg-blue-50'
                       : theme === 'light'
-                      ? 'text-gray-700 hover:text-blue-600'
-                      : 'text-gray-300 hover:text-blue-400'
+                      ? 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                      : 'text-gray-300 hover:text-blue-400 hover:bg-slate-800'
                   }`}
                 >
                   {item.name}
@@ -246,15 +267,15 @@ const Header = () => {
               
               {user ? (
                 <div className="flex flex-col space-y-2 pt-2 border-t border-gray-200">
-                  <div className={`text-sm ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>
+                  <div className={`text-sm px-3 py-2 ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>
                     Welcome, {getUserDisplayName()}
                   </div>
-                  <Button asChild variant="outline" size="sm" className="w-fit">
-                    <Link to="/profile" onClick={() => setIsMenuOpen(false)}>Profile</Link>
+                  <Button asChild variant="outline" size="sm" className="w-fit min-h-[44px] focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <Link to="/profile" onClick={() => setIsMenuOpen(false)} aria-label="Go to profile settings">Profile</Link>
                   </Button>
                   {isAdmin && (
-                    <Button asChild variant="outline" size="sm" className="w-fit">
-                      <Link to="/admin" onClick={() => setIsMenuOpen(false)}>Admin Dashboard</Link>
+                    <Button asChild variant="outline" size="sm" className="w-fit min-h-[44px] focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <Link to="/admin" onClick={() => setIsMenuOpen(false)} aria-label="Go to admin dashboard">Admin Dashboard</Link>
                     </Button>
                   )}
                   <Button 
@@ -264,14 +285,15 @@ const Header = () => {
                     }}
                     variant="outline" 
                     size="sm" 
-                    className="w-fit"
+                    aria-label="Sign out of your account"
+                    className="w-fit min-h-[44px] focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     Sign Out
                   </Button>
                 </div>
               ) : (
-                <Button asChild className="bg-gradient-to-r from-blue-600 to-purple-600 text-white w-fit">
-                  <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Sign In</Link>
+                <Button asChild className="bg-gradient-to-r from-blue-600 to-purple-600 text-white w-fit min-h-[44px] focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <Link to="/auth" onClick={() => setIsMenuOpen(false)} aria-label="Sign in to your account">Sign In</Link>
                 </Button>
               )}
             </div>
