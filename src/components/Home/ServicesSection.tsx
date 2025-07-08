@@ -127,6 +127,7 @@ const staticServices = [{
   features: ['CCTV Setup', 'Biometric Systems', 'Access Control', 'Maintenance'],
   catchyText: '👁️ Watch over what matters most to you!'
 }];
+
 const ServicesSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
@@ -134,6 +135,7 @@ const ServicesSection = () => {
     theme
   } = useTheme();
   const servicesPerPage = 6;
+
   const getIconComponent = (iconName: string) => {
     const icons: {
       [key: string]: React.ReactNode;
@@ -168,22 +170,27 @@ const ServicesSection = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentIndex]);
+
   const handleNext = () => {
     if (currentIndex + servicesPerPage < staticServices.length) {
       setCurrentIndex(currentIndex + servicesPerPage);
     }
   };
+
   const handlePrev = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - servicesPerPage);
     }
   };
+
   const handleViewDetails = (serviceId: string) => {
     navigate(`/services/${serviceId}`);
   };
+
   const currentServices = staticServices.slice(currentIndex, currentIndex + servicesPerPage);
   const canGoPrev = currentIndex > 0;
   const canGoNext = currentIndex + servicesPerPage < staticServices.length;
+
   const ArrowNavigation = () => <div className="flex justify-between items-center mb-6 px-4">
       <Button variant="outline" size="icon" onClick={handlePrev} disabled={!canGoPrev} className={`w-10 h-10 rounded-full border-2 hover:bg-white transition-all duration-300 shadow-lg ${theme === 'light' ? 'bg-white/90 backdrop-blur text-gray-900 hover:text-gray-900' : 'bg-slate-800/90 backdrop-blur text-white hover:bg-slate-700 border-slate-600'}`}>
         <ChevronLeft className={`h-5 w-5 ${theme === 'light' ? 'text-gray-900' : 'text-white'}`} />
@@ -192,13 +199,23 @@ const ServicesSection = () => {
       <div className="flex items-center gap-2">
         {Array.from({
         length: Math.ceil(staticServices.length / servicesPerPage)
-      }).map((_, index) => {})}
+      }).map((_, index) => (
+        <div
+          key={index}
+          className={`w-2 h-2 rounded-full transition-all duration-300 ${
+            Math.floor(currentIndex / servicesPerPage) === index
+              ? theme === 'light' ? 'bg-blue-600' : 'bg-blue-400'
+              : theme === 'light' ? 'bg-gray-300' : 'bg-gray-600'
+          }`}
+        />
+      ))}
       </div>
       
       <Button variant="outline" size="icon" onClick={handleNext} disabled={!canGoNext} className={`w-10 h-10 rounded-full border-2 hover:bg-white transition-all duration-300 shadow-lg ${theme === 'light' ? 'bg-white/90 backdrop-blur text-gray-900 hover:text-gray-900' : 'bg-slate-800/90 backdrop-blur text-white hover:bg-slate-700 border-slate-600'}`}>
         <ChevronRight className={`h-5 w-5 ${theme === 'light' ? 'text-gray-900' : 'text-white'}`} />
       </Button>
     </div>;
+
   return <section className={`py-16 ${theme === 'light' ? 'bg-gray-50' : 'bg-slate-900'}`} id="services">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
@@ -258,4 +275,5 @@ const ServicesSection = () => {
       </div>
     </section>;
 };
+
 export default ServicesSection;
