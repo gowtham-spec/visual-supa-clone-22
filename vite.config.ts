@@ -38,14 +38,8 @@ export default defineConfig(({ mode }) => ({
         }
       }
     },
-    // Enable minification
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: mode === 'production',
-        drop_debugger: mode === 'production',
-      },
-    },
+    // Use esbuild for minification instead of terser to avoid dependency issues
+    minify: 'esbuild',
     // Target modern browsers for better optimization
     target: 'es2020',
     // Enable source maps for debugging in development
