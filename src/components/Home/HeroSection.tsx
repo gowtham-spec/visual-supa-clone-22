@@ -3,13 +3,31 @@ import React, { lazy, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Zap, Shield, Star, Check } from 'lucide-react';
 
-// Lazy load heavy components to reduce initial bundle size
-const SpaceBackground = lazy(() => import('./SpaceBackground'));
-const HeroAnimation = lazy(() => import('./HeroAnimation'));
+// Lazy load heavy 3D components with lower priority
+const SpaceBackground = lazy(() => 
+  import('./SpaceBackground').then(module => {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(module), 300);
+    });
+  })
+);
 
-// Lightweight fallback components
-const SpaceBackgroundFallback = () => <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900"></div>;
-const HeroAnimationFallback = () => <div className="w-full h-96 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg animate-pulse"></div>;
+const HeroAnimation = lazy(() => 
+  import('./HeroAnimation').then(module => {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(module), 200);
+    });
+  })
+);
+
+// Lightweight fallback components for better perceived performance
+const SpaceBackgroundFallback = () => (
+  <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900"></div>
+);
+
+const HeroAnimationFallback = () => (
+  <div className="w-full h-96 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg"></div>
+);
 
 const HeroSection = () => {
   const scrollToPortfolio = () => {
@@ -27,7 +45,7 @@ const HeroSection = () => {
       
       <div className="container mx-auto px-4 z-10 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left Content */}
+          {/* Left Content - Immediate load */}
           <div className="text-center lg:text-left space-y-10">
             <div className="space-y-8">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
@@ -43,37 +61,23 @@ const HeroSection = () => {
               </p>
             </div>
 
-            {/* Feature boxes */}
+            {/* Feature boxes - Optimized rendering */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <div className="flex items-center space-x-3 p-5 rounded-lg bg-background/50 backdrop-blur-sm border">
-                <div className="p-3 rounded-lg bg-blue-500/10">
-                  <Zap className="h-5 w-5 text-blue-600" />
+              {[
+                { icon: Zap, title: 'Cutting-edge', subtitle: 'Solutions', color: 'blue' },
+                { icon: Shield, title: 'Results-driven', subtitle: 'Strategy', color: 'purple' },
+                { icon: Check, title: 'Client-focused', subtitle: 'Success', color: 'green' }
+              ].map(({ icon: Icon, title, subtitle, color }, index) => (
+                <div key={index} className="flex items-center space-x-3 p-5 rounded-lg bg-background/50 backdrop-blur-sm border">
+                  <div className={`p-3 rounded-lg bg-${color}-500/10`}>
+                    <Icon className={`h-5 w-5 text-${color}-600`} />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm">{title}</h3>
+                    <p className="text-xs text-muted-foreground">{subtitle}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-sm">Cutting-edge</h3>
-                  <p className="text-xs text-muted-foreground">Solutions</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-3 p-5 rounded-lg bg-background/50 backdrop-blur-sm border">
-                <div className="p-3 rounded-lg bg-purple-500/10">
-                  <Shield className="h-5 w-5 text-purple-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sm">Results-driven</h3>
-                  <p className="text-xs text-muted-foreground">Strategy</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-3 p-5 rounded-lg bg-background/50 backdrop-blur-sm border">
-                <div className="p-3 rounded-lg bg-green-500/10">
-                  <Check className="h-5 w-5 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sm">Client-focused</h3>
-                  <p className="text-xs text-muted-foreground">Success</p>
-                </div>
-              </div>
+              ))}
             </div>
 
             {/* CTA Buttons */}
@@ -97,7 +101,7 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Right Side - Hero Animation */}
+          {/* Right Side - Lazy loaded animation */}
           <div className="flex justify-center lg:justify-end">
             <div className="relative w-full max-w-lg">
               <Suspense fallback={<HeroAnimationFallback />}>
