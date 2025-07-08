@@ -73,7 +73,7 @@ const ReviewForm = ({ onClose }: ReviewFormProps) => {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle as="h2">Write a Review</CardTitle>
+        <CardTitle>Write a Review</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
