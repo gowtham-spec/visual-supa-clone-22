@@ -3,22 +3,9 @@ import React, { lazy, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Zap, Shield, Star, Check } from 'lucide-react';
 
-// Lazy load heavy 3D components with lower priority
-const SpaceBackground = lazy(() => 
-  import('./SpaceBackground').then(module => {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(module), 300);
-    });
-  })
-);
-
-const HeroAnimation = lazy(() => 
-  import('./HeroAnimation').then(module => {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(module), 200);
-    });
-  })
-);
+// Lazy load heavy 3D components
+const SpaceBackground = lazy(() => import('./SpaceBackground'));
+const HeroAnimation = lazy(() => import('./HeroAnimation'));
 
 // Lightweight fallback components for better perceived performance
 const SpaceBackgroundFallback = () => (

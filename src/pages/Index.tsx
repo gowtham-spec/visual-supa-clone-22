@@ -8,22 +8,8 @@ import { useTheme } from '@/contexts/ThemeContext';
 const AboutSection = lazy(() => import('@/components/Home/AboutSection'));
 
 // Delayed loading components with better chunking
-const ServicesSection = lazy(() => 
-  import('@/components/Home/ServicesSection').then(module => {
-    // Add a small delay to prevent blocking
-    return new Promise(resolve => {
-      setTimeout(() => resolve(module), 100);
-    });
-  })
-);
-
-const PortfolioGrid = lazy(() => 
-  import('@/components/Portfolio/PortfolioGrid').then(module => {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(module), 200);
-    });
-  })
-);
+const ServicesSection = lazy(() => import('@/components/Home/ServicesSection'));
+const PortfolioGrid = lazy(() => import('@/components/Portfolio/PortfolioGrid'));
 
 // Lower priority components
 const ClientReviews = lazy(() => import('@/components/Home/ClientReviews'));
