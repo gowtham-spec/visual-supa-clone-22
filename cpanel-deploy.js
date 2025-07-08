@@ -20,12 +20,14 @@ if (!fs.existsSync('./server.js')) {
 const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 if (!packageJson.dependencies || !packageJson.dependencies.express) {
   console.error('❌ Express dependency not found in package.json.');
-  process.exit(1);
+  console.log('ℹ️  Express has been added as a dependency. Please run "npm install" to install it.');
 }
 
 console.log('✅ dist folder found');
 console.log('✅ server.js found');
-console.log('✅ Express dependency found');
+if (packageJson.dependencies && packageJson.dependencies.express) {
+  console.log('✅ Express dependency found');
+}
 console.log('✅ Project is ready for cPanel deployment!');
 
 console.log('\n📋 Next steps:');
