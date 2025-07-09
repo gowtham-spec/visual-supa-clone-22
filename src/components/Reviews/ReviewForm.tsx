@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -76,76 +75,48 @@ const ReviewForm = ({ onClose }: ReviewFormProps) => {
         <CardTitle>Write a Review</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="review-name" className="text-sm font-medium">
-                Your Name *
-              </Label>
+              <Label htmlFor="name">Your Name</Label>
               <Input
-                id="review-name"
-                type="text"
+                id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Enter your full name"
+                placeholder="Enter your name"
                 required
-                aria-required="true"
-                aria-describedby="name-help"
-                className="focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
-              <div id="name-help" className="text-xs text-gray-600">
-                This will be displayed with your review
-              </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="review-company" className="text-sm font-medium">
-                Company (Optional)
-              </Label>
+              <Label htmlFor="company">Company (Optional)</Label>
               <Input
-                id="review-company"
-                type="text"
+                id="company"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
                 placeholder="Your company name"
-                className="focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="review-service-type" className="text-sm font-medium">
-              Service Type (Optional)
-            </Label>
+            <Label htmlFor="service-type">Service Type (Optional)</Label>
             <Input
-              id="review-service-type"
-              type="text"
+              id="service-type"
               value={serviceType}
               onChange={(e) => setServiceType(e.target.value)}
               placeholder="Which service did you use?"
-              className="focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
           <div className="space-y-2">
-            <Label className="text-sm font-medium">
-              Rating *
-            </Label>
-            <div 
-              className="flex items-center space-x-1"
-              role="radiogroup"
-              aria-labelledby="rating-label"
-              aria-required="true"
-            >
-              <span id="rating-label" className="sr-only">Select your rating from 1 to 5 stars</span>
+            <Label>Rating</Label>
+            <div className="flex items-center space-x-1">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
                   type="button"
                   onClick={() => setRating(star)}
-                  role="radio"
-                  aria-checked={star === rating}
-                  aria-label={`${star} star${star !== 1 ? 's' : ''}`}
-                  className="p-1 min-h-[44px] min-w-[44px] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="p-1"
                 >
                   <Star
                     className={`h-6 w-6 ${
@@ -153,59 +124,40 @@ const ReviewForm = ({ onClose }: ReviewFormProps) => {
                         ? 'fill-yellow-400 text-yellow-400'
                         : 'text-gray-300'
                     }`}
-                    aria-hidden="true"
                   />
                 </button>
               ))}
-              <span className="ml-2 text-sm text-muted-foreground" aria-live="polite">
-                {rating}/5 stars selected
+              <span className="ml-2 text-sm text-muted-foreground">
+                {rating}/5 stars
               </span>
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="review-comment" className="text-sm font-medium">
-              Your Review *
-            </Label>
+            <Label htmlFor="comment">Your Review</Label>
             <Textarea
-              id="review-comment"
+              id="comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Share your experience with our services..."
               rows={4}
               required
-              aria-required="true"
-              aria-describedby="comment-help"
-              className="focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
-            <div id="comment-help" className="text-xs text-gray-600">
-              Minimum 10 characters. Be specific about your experience.
-            </div>
           </div>
 
           <div className="flex gap-4">
             <Button 
               type="submit" 
               disabled={submitReviewMutation.isPending}
-              className="flex-1 min-h-[44px] bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              aria-describedby="submit-help"
+              className="flex-1"
             >
-              {submitReviewMutation.isPending ? "Submitting Review..." : "Submit Review"}
+              {submitReviewMutation.isPending ? "Submitting..." : "Submit Review"}
             </Button>
             {onClose && (
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={onClose}
-                aria-label="Cancel review submission"
-                className="min-h-[44px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+              <Button type="button" variant="outline" onClick={onClose}>
                 Cancel
               </Button>
             )}
-          </div>
-          <div id="submit-help" className="text-xs text-gray-600">
-            Your review will be reviewed before being published
           </div>
         </form>
       </CardContent>

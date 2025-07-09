@@ -4,14 +4,10 @@ import Layout from '@/components/Layout/Layout';
 import HeroSection from '@/components/Home/HeroSection';
 import { useTheme } from '@/contexts/ThemeContext';
 
-// Immediate loading components
-const AboutSection = lazy(() => import('@/components/Home/AboutSection'));
-
-// Delayed loading components with better chunking
+// Lazy load non-critical sections to improve initial page load
 const ServicesSection = lazy(() => import('@/components/Home/ServicesSection'));
+const AboutSection = lazy(() => import('@/components/Home/AboutSection'));
 const PortfolioGrid = lazy(() => import('@/components/Portfolio/PortfolioGrid'));
-
-// Lower priority components
 const ClientReviews = lazy(() => import('@/components/Home/ClientReviews'));
 const TrustedPartners = lazy(() => import('@/components/Home/TrustedPartners'));
 const FAQSection = lazy(() => import('@/components/Home/FAQSection'));
@@ -19,60 +15,52 @@ const BlogSection = lazy(() => import('@/components/Home/BlogSection'));
 const ContactSection = lazy(() => import('@/components/Home/ContactSection'));
 const SupabaseStatus = lazy(() => import('@/components/SupabaseStatus'));
 
-// Optimized loading placeholder
+// Lightweight loading placeholder
 const SectionLoader = () => (
-  <div className="flex justify-center items-center py-8">
-    <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-  </div>
-);
-
-// Skeleton loader for better perceived performance
-const SkeletonLoader = ({ height = "py-16" }: { height?: string }) => (
-  <div className={`${height} animate-pulse`}>
-    <div className="container mx-auto px-4">
-      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded mb-4 max-w-md mx-auto"></div>
-      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-8 max-w-2xl mx-auto"></div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(6)].map((_, i) => (
-          <div key={i} className="h-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
-        ))}
-      </div>
-    </div>
+  <div className="flex justify-center items-center py-16">
+    <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
   </div>
 );
 
 const Index = () => {
   const { theme } = useTheme();
   
+  const scrollToPortfolio = () => {
+    const portfolioSection = document.getElementById('portfolio-section');
+    if (portfolioSection) {
+      portfolioSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <Layout>
-      {/* Supabase Status - Lowest priority */}
+      {/* Supabase Status Indicator - Lazy loaded */}
       <Suspense fallback={null}>
         <div className="fixed top-4 right-4 z-50">
           <SupabaseStatus />
         </div>
       </Suspense>
       
-      {/* Hero Section - Critical, immediate load */}
+      {/* Hero Section - Critical, load immediately */}
       <section id="hero-section">
         <HeroSection />
       </section>
       
-      {/* About Section - High priority */}
+      {/* About Section - Below the fold, lazy load */}
       <section id="about-section">
         <Suspense fallback={<SectionLoader />}>
           <AboutSection />
         </Suspense>
       </section>
       
-      {/* Services Section - Medium priority with skeleton */}
+      {/* Services Section - Below the fold, lazy load */}
       <section id="services-section">
-        <Suspense fallback={<SkeletonLoader />}>
+        <Suspense fallback={<SectionLoader />}>
           <ServicesSection />
         </Suspense>
       </section>
       
-      {/* Portfolio Section - Medium priority */}
+      {/* Portfolio Section - Below the fold, lazy load */}
       <section id="portfolio-section" className={`py-16 ${theme === 'light' ? 'bg-background' : 'bg-slate-900'}`}>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -85,30 +73,34 @@ const Index = () => {
             </p>
           </div>
         </div>
-        <Suspense fallback={<SkeletonLoader height="py-8" />}>
+        <Suspense fallback={<SectionLoader />}>
           <PortfolioGrid />
         </Suspense>
       </section>
       
-      {/* Lower priority sections with intersection observer optimization */}
+      {/* Client Reviews - Lazy load */}
       <Suspense fallback={<SectionLoader />}>
         <ClientReviews />
       </Suspense>
       
+      {/* Trusted Partners - Lazy load */}
       <Suspense fallback={<SectionLoader />}>
         <TrustedPartners />
       </Suspense>
       
+      {/* Blog Section - Lazy load */}
       <section id="blog-section">
         <Suspense fallback={<SectionLoader />}>
           <BlogSection />
         </Suspense>
       </section>
       
+      {/* FAQ Section - Lazy load */}
       <Suspense fallback={<SectionLoader />}>
         <FAQSection />
       </Suspense>
       
+      {/* Contact Section - Lazy load */}
       <section id="contact-section">
         <Suspense fallback={<SectionLoader />}>
           <ContactSection />

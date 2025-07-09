@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -5,7 +6,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import ErrorBoundary from "@/components/ErrorBoundary";
 
 // Create QueryClient with optimized settings for better performance
 const queryClient = new QueryClient({
@@ -29,12 +29,9 @@ const PageLoader = () => (
   </div>
 );
 
-// Lazy load all pages with better error handling
+// Lazy load all pages with prefetch hints for critical pages
 const Index = lazy(() => 
-  import("./pages/Index").then(module => ({ default: module.default })).catch(err => {
-    console.error('Failed to load Index page:', err);
-    throw err;
-  })
+  import("./pages/Index").then(module => ({ default: module.default }))
 );
 const AboutUs = lazy(() => import("./pages/AboutUs"));
 const Blog = lazy(() => import("./pages/Blog"));
@@ -80,76 +77,72 @@ const Documentation = lazy(() => import("./pages/Documentation"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
-  console.log('App component rendering...');
-  
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  {/* Main pages */}
-                  <Route path="/" element={<Index />} />
-                  <Route path="/about" element={<AboutUs />} />
-                  <Route path="/about-us" element={<AboutUs />} />
-                  <Route path="/our-team" element={<OurTeam />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/blog/:id" element={<BlogDetail />} />
-                  <Route path="/portfolio" element={<Portfolio />} />
-                  <Route path="/portfolio/:id" element={<PortfolioDetail />} />
-                  <Route path="/news" element={<News />} />
-                  <Route path="/news-detail/:id" element={<NewsDetail />} />
-                  <Route path="/careers" element={<Careers />} />
-                  <Route path="/reviews" element={<Reviews />} />
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                {/* Main pages */}
+                <Route path="/" element={<Index />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/about-us" element={<AboutUs />} />
+                <Route path="/our-team" element={<OurTeam />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:id" element={<BlogDetail />} />
+                <Route path="/portfolio" element={<Portfolio />} />
+                <Route path="/portfolio/:id" element={<PortfolioDetail />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/news-detail/:id" element={<NewsDetail />} />
+                <Route path="/careers" element={<Careers />} />
+                <Route path="/reviews" element={<Reviews />} />
 
-                  {/* Authentication pages */}
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/signin" element={<SignIn />} />
-                  <Route path="/signup" element={<SignUp />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/reset-password" element={<ResetPassword />} />
-                  <Route path="/profile" element={<ProfileSettings />} />
+                {/* Authentication pages */}
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/profile" element={<ProfileSettings />} />
 
-                  {/* Admin */}
-                  <Route path="/admin" element={<AdminDashboard />} />
+                {/* Admin */}
+                <Route path="/admin" element={<AdminDashboard />} />
 
-                  {/* Service pages */}
-                  <Route path="/services/web-development" element={<WebDevelopment />} />
-                  <Route path="/services/mobile-development" element={<MobileDevelopment />} />
-                  <Route path="/services/software-development" element={<SoftwareDevelopment />} />
-                  <Route path="/services/digital-marketing" element={<DigitalMarketing />} />
-                  <Route path="/services/erp-crm" element={<CustomERPCRM />} />
-                  <Route path="/services/iot-embedded" element={<IoTEmbedded />} />
-                  <Route path="/services/seo-branding" element={<SEOBranding />} />
-                  <Route path="/services/email-marketing" element={<EmailMarketing />} />
-                  <Route path="/services/ui-ux-design" element={<UIUXDesign />} />
-                  <Route path="/services/data-analytics" element={<DataAnalytics />} />
-                  <Route path="/services/it-infrastructure" element={<ITInfrastructure />} />
-                  <Route path="/services/business-consulting" element={<BusinessConsulting />} />
-                  <Route path="/services/cctv-biometric" element={<CCTVBiometric />} />
-                  <Route path="/services/internship-training" element={<InternshipTraining />} />
+                {/* Service pages */}
+                <Route path="/services/web-development" element={<WebDevelopment />} />
+                <Route path="/services/mobile-development" element={<MobileDevelopment />} />
+                <Route path="/services/software-development" element={<SoftwareDevelopment />} />
+                <Route path="/services/digital-marketing" element={<DigitalMarketing />} />
+                <Route path="/services/erp-crm" element={<CustomERPCRM />} />
+                <Route path="/services/iot-embedded" element={<IoTEmbedded />} />
+                <Route path="/services/seo-branding" element={<SEOBranding />} />
+                <Route path="/services/email-marketing" element={<EmailMarketing />} />
+                <Route path="/services/ui-ux-design" element={<UIUXDesign />} />
+                <Route path="/services/data-analytics" element={<DataAnalytics />} />
+                <Route path="/services/it-infrastructure" element={<ITInfrastructure />} />
+                <Route path="/services/business-consulting" element={<BusinessConsulting />} />
+                <Route path="/services/cctv-biometric" element={<CCTVBiometric />} />
+                <Route path="/services/internship-training" element={<InternshipTraining />} />
 
-                  {/* Legal and support pages */}
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/terms-of-service" element={<TermsOfService />} />
-                  <Route path="/cookie-policy" element={<CookiePolicy />} />
-                  <Route path="/gdpr-compliance" element={<GDPRCompliance />} />
-                  <Route path="/support-center" element={<SupportCenter />} />
-                  <Route path="/documentation" element={<Documentation />} />
+                {/* Legal and support pages */}
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/cookie-policy" element={<CookiePolicy />} />
+                <Route path="/gdpr-compliance" element={<GDPRCompliance />} />
+                <Route path="/support-center" element={<SupportCenter />} />
+                <Route path="/documentation" element={<Documentation />} />
 
-                  {/* Catch all route for 404 */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
-          </TooltipProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+                {/* Catch all route for 404 */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

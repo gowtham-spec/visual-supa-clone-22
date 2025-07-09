@@ -49,121 +49,75 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, projectTit
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md" role="dialog" aria-labelledby="contact-modal-title" aria-describedby="contact-modal-description">
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <div className="flex items-center justify-between">
-            <DialogTitle id="contact-modal-title">Request Demo - {projectTitle}</DialogTitle>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={onClose}
-              aria-label="Close demo request form"
-              className="min-h-[44px] min-w-[44px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <X className="h-4 w-4" aria-hidden="true" />
+            <DialogTitle>Request Demo - {projectTitle}</DialogTitle>
+            <Button variant="ghost" size="sm" onClick={onClose}>
+              <X className="h-4 w-4" />
             </Button>
           </div>
         </DialogHeader>
         
-        <div id="contact-modal-description" className="sr-only">
-          Fill out this form to request a personalized demo of {projectTitle}. All fields marked with an asterisk are required.
-        </div>
-        
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="contact-name" className="text-sm font-medium">
-              Full Name *
-            </Label>
+            <Label htmlFor="name">Full Name *</Label>
             <Input
-              id="contact-name"
+              id="name"
               name="name"
-              type="text"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Enter your full name"
               required
-              aria-required="true"
-              aria-describedby="name-error"
-              className="mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
-            <div id="name-error" className="sr-only" aria-live="polite"></div>
           </div>
           
           <div>
-            <Label htmlFor="contact-email" className="text-sm font-medium">
-              Email Address *
-            </Label>
+            <Label htmlFor="email">Email *</Label>
             <Input
-              id="contact-email"
+              id="email"
               name="email"
               type="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your email address"
               required
-              aria-required="true"
-              aria-describedby="email-error"
-              className="mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
-            <div id="email-error" className="sr-only" aria-live="polite"></div>
           </div>
           
           <div>
-            <Label htmlFor="contact-company" className="text-sm font-medium">
-              Company Name
-            </Label>
+            <Label htmlFor="company">Company</Label>
             <Input
-              id="contact-company"
+              id="company"
               name="company"
-              type="text"
               value={formData.company}
               onChange={handleChange}
-              placeholder="Enter your company name (optional)"
-              className="mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           
           <div>
-            <Label htmlFor="contact-phone" className="text-sm font-medium">
-              Phone Number
-            </Label>
+            <Label htmlFor="phone">Phone</Label>
             <Input
-              id="contact-phone"
+              id="phone"
               name="phone"
-              type="tel"
               value={formData.phone}
               onChange={handleChange}
-              placeholder="Enter your phone number (optional)"
-              className="mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           
           <div>
-            <Label htmlFor="contact-message" className="text-sm font-medium">
-              Message
-            </Label>
+            <Label htmlFor="message">Message</Label>
             <Textarea
-              id="contact-message"
+              id="message"
               name="message"
               value={formData.message}
               onChange={handleChange}
-              placeholder="Additional details about your demo request"
               rows={4}
-              className="mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           
-          <Button 
-            type="submit" 
-            className="w-full bg-blue-600 hover:bg-blue-700 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            aria-describedby="submit-description"
-          >
-            <Send className="h-4 w-4 mr-2" aria-hidden="true" />
-            Send Demo Request
+          <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
+            <Send className="h-4 w-4 mr-2" />
+            Send Request
           </Button>
-          <div id="submit-description" className="sr-only">
-            Submit your demo request form. We'll contact you within 24 hours.
-          </div>
         </form>
       </DialogContent>
     </Dialog>
