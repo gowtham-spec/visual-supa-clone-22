@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, CheckCircle, ArrowRight, Star, TrendingUp, Shield, Zap } from 'lucide-react';
 import LiveDemoModal from '@/components/Portfolio/LiveDemoModal';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const portfolioData = {
   'invexai': {
@@ -175,7 +177,95 @@ const portfolioData = {
 const PortfolioDetail = () => {
   const { id } = useParams();
   const [isLiveDemoOpen, setIsLiveDemoOpen] = useState(false);
-  const project = portfolioData[id as keyof typeof portfolioData];
+  const [project, setProject] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProject();
+  }, [id]);
+
+  const fetchProject = async () => {
+    if (!id) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // First try to fetch from database
+      const { data, error } = await supabase
+        .from('portfolio_projects')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (data && !error) {
+        // Convert database project to expected format
+        const dbProject = {
+          title: data.title,
+          category: data.category,
+          description: data.long_description || data.description,
+          image: data.image,
+          technologies: data.technologies,
+          challenge: 'This project presented unique technical and business challenges that required innovative solutions.',
+          solution: 'Our team developed a comprehensive solution using modern technologies and best practices.',
+          features: [
+            'Modern and responsive user interface',
+            'Scalable architecture and infrastructure',
+            'Real-time data processing capabilities',
+            'Advanced security and compliance features',
+            'Integration with third-party services',
+            'Comprehensive testing and quality assurance',
+            'Performance optimization and monitoring',
+            'User training and documentation'
+          ],
+          results: [
+            {
+              metric: 'Performance',
+              value: '95%',
+              description: 'Improvement in system performance'
+            },
+            {
+              metric: 'User Satisfaction',
+              value: '90%',
+              description: 'Positive user feedback'
+            },
+            {
+              metric: 'Efficiency',
+              value: '80%',
+              description: 'Increase in operational efficiency'
+            },
+            {
+              metric: 'ROI',
+              value: '150%',
+              description: 'Return on investment achieved'
+            }
+          ]
+        };
+        setProject(dbProject);
+      } else {
+        // Fallback to static data
+        const staticProject = portfolioData[id as keyof typeof portfolioData];
+        setProject(staticProject);
+      }
+    } catch (error) {
+      console.error('Error fetching project:', error);
+      // Fallback to static data
+      const staticProject = portfolioData[id as keyof typeof portfolioData];
+      setProject(staticProject);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-16 pt-32 text-center">
+          <div className="text-lg">Loading project details...</div>
+        </div>
+      </Layout>
+    );
+  }
 
   if (!project) {
     return (
@@ -184,7 +274,7 @@ const PortfolioDetail = () => {
           <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
           <p className="text-muted-foreground mb-8">The requested project could not be found.</p>
           <Button asChild>
-            <Link to="/">Return Home</Link>
+            <Link to="/portfolio">Return to Portfolio</Link>
           </Button>
         </div>
       </Layout>
@@ -198,7 +288,7 @@ const PortfolioDetail = () => {
         <section className="pt-32 pb-16">
           <div className="container mx-auto px-4">
             <Button variant="ghost" asChild className="mb-8">
-              <Link to="/">
+              <Link to="/portfolio">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Portfolio
               </Link>
@@ -251,7 +341,7 @@ const PortfolioDetail = () => {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Key Features Delivered</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {project.features.map((feature, index) => (
+              {project.features.map((feature: string, index: number) => (
                 <div key={index} className="flex items-start gap-4 p-4 rounded-lg hover:bg-muted/50 transition-colors">
                   <CheckCircle className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
                   <p className="text-muted-foreground">{feature}</p>
@@ -266,7 +356,7 @@ const PortfolioDetail = () => {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Technologies Used</h2>
             <div className="flex flex-wrap justify-center gap-4">
-              {project.technologies.map((tech, index) => (
+              {project.technologies.map((tech: string, index: number) => (
                 <Badge key={index} variant="outline" className="px-4 py-2 text-lg">
                   {tech}
                 </Badge>
@@ -280,7 +370,7 @@ const PortfolioDetail = () => {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Results Achieved</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {project.results.map((result, index) => (
+              {project.results.map((result: any, index: number) => (
                 <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow">
                   <CardContent className="pt-6">
                     <TrendingUp className="w-8 h-8 text-blue-600 mx-auto mb-4" />

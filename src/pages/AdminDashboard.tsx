@@ -12,7 +12,8 @@ import AdminProjectRequests from '@/components/Admin/AdminProjectRequests';
 import AdminJobApplications from '@/components/Admin/AdminJobApplications';
 import AdminNews from '@/components/Admin/AdminNews';
 import AdminJobPostings from '@/components/Admin/AdminJobPostings';
-import { BarChart3, FileText, MessageSquare, Star, Briefcase, Users, Newspaper, PlusSquare } from 'lucide-react';
+import AdminPortfolio from '@/components/Admin/AdminPortfolio';
+import { BarChart3, FileText, MessageSquare, Star, Briefcase, Users, Newspaper, PlusSquare, FolderOpen } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdmin();
@@ -60,10 +61,14 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-8">
-          <TabsList className="grid w-full grid-cols-8 p-1">
+          <TabsList className="grid w-full grid-cols-9 p-1">
             <TabsTrigger value="overview" className="flex items-center gap-2 text-xs">
               <BarChart3 className="h-4 w-4" />
               Overview
+            </TabsTrigger>
+            <TabsTrigger value="portfolio" className="flex items-center gap-2 text-xs">
+              <FolderOpen className="h-4 w-4" />
+              Portfolio
             </TabsTrigger>
             <TabsTrigger value="blog" className="flex items-center gap-2 text-xs">
               <FileText className="h-4 w-4" />
@@ -97,6 +102,10 @@ const AdminDashboard = () => {
 
           <TabsContent value="overview">
             <AdminOverview />
+          </TabsContent>
+
+          <TabsContent value="portfolio">
+            <AdminPortfolio />
           </TabsContent>
 
           <TabsContent value="blog">
