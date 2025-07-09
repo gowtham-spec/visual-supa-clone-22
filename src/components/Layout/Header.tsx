@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [activeNavItem, setActiveNavItem] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
@@ -66,6 +67,20 @@ const Header = () => {
     setIsMenuOpen(false);
   };
 
+  const handleCareersClick = () => {
+    navigate('/careers');
+    setIsMenuOpen(false);
+  };
+
+  const handleNavClick = (itemName: string, action: () => void) => {
+    setActiveNavItem(itemName);
+    action();
+    // Reset active state after animation
+    setTimeout(() => {
+      setActiveNavItem(null);
+    }, 300);
+  };
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setIsUserMenuOpen(false);
@@ -79,6 +94,7 @@ const Header = () => {
     { name: 'Blog', path: '/blog', action: () => scrollToSection('blog-section') },
     { name: 'News', path: '/news', action: handleNewsClick },
     { name: 'Reviews', path: '/reviews', action: handleReviewsClick },
+    { name: 'Careers', path: '/careers', action: handleCareersClick },
     { name: 'Contact', path: '/#contact', action: () => scrollToSection('contact-section') },
   ];
 
@@ -93,6 +109,30 @@ const Header = () => {
     return 'User';
   };
 
+  const getNavButtonClass = (itemName: string, isActive: boolean) => {
+    const baseClass = "text-sm font-medium transition-all duration-300 relative px-3 py-2 rounded-md";
+    const isClicked = activeNavItem === itemName;
+    
+    if (isClicked) {
+      // Click animation with box and text color change
+      const boxColor = theme === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+      const textColor = theme === 'light' ? '#3B82F6' : '#60A5FA';
+      return `${baseClass} transform scale-105 shadow-md transition-all duration-300`
+        + ` ${theme === 'light' ? 'bg-black/10' : 'bg-white/10'}`
+        + ` ${theme === 'light' ? 'text-blue-600' : 'text-blue-400'}`;
+    }
+    
+    if (isActive) {
+      return `${baseClass} text-blue-600`;
+    }
+    
+    return `${baseClass} ${
+      theme === 'light'
+        ? 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+        : 'text-gray-300 hover:text-blue-400 hover:bg-slate-800'
+    }`;
+  };
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 ${theme === 'light' ? 'bg-white/95 backdrop-blur-sm border-b border-gray-200' : 'bg-slate-900/95 backdrop-blur-sm border-b border-slate-700'}`}>
       <nav className="container mx-auto px-4 py-2">
@@ -101,18 +141,18 @@ const Header = () => {
           
           {/* Desktop Navigation - Centered */}
           <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
-            <div className="flex items-center space-x-8">
+            <div className="flex items-center space-x-2">
               {navItems.map((item) => (
                 <button
                   key={item.name}
-                  onClick={item.action}
-                  className={`text-sm font-medium transition-colors duration-200 ${
-                    isActivePath(item.path)
-                      ? 'text-blue-600'
-                      : theme === 'light'
-                      ? 'text-gray-700 hover:text-blue-600'
-                      : 'text-gray-300 hover:text-blue-400'
-                  }`}
+                  onClick={() => handleNavClick(item.name, item.action)}
+                  className={getNavButtonClass(item.name, isActivePath(item.path))}
+                  style={{
+                    ...(activeNavItem === item.name && {
+                      backgroundColor: theme === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+                      color: theme === 'light' ? '#3B82F6' : '#60A5FA',
+                    })
+                  }}
                 >
                   {item.name}
                 </button>
@@ -231,14 +271,22 @@ const Header = () => {
               {navItems.map((item) => (
                 <button
                   key={item.name}
-                  onClick={item.action}
-                  className={`text-sm font-medium transition-colors duration-200 text-left ${
-                    isActivePath(item.path)
+                  onClick={() => handleNavClick(item.name, item.action)}
+                  className={`text-sm font-medium transition-all duration-300 text-left px-3 py-2 rounded-md ${
+                    activeNavItem === item.name
+                      ? `${theme === 'light' ? 'bg-black/10 text-blue-600' : 'bg-white/10 text-blue-400'} transform scale-105`
+                      : isActivePath(item.path)
                       ? 'text-blue-600'
                       : theme === 'light'
-                      ? 'text-gray-700 hover:text-blue-600'
-                      : 'text-gray-300 hover:text-blue-400'
+                      ? 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+                      : 'text-gray-300 hover:text-blue-400 hover:bg-slate-800'
                   }`}
+                  style={{
+                    ...(activeNavItem === item.name && {
+                      backgroundColor: theme === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+                      color: theme === 'light' ? '#3B82F6' : '#60A5FA',
+                    })
+                  }}
                 >
                   {item.name}
                 </button>
