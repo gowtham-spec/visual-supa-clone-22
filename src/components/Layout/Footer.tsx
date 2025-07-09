@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Twitter, Instagram, Linkedin, ArrowUp, Mail, Phone, MapPin } from 'lucide-react';
@@ -65,14 +66,14 @@ const Footer = () => {
           <div className="space-y-6">
             <h3 className={`text-lg font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>Services</h3>
             <ul className="space-y-2">
-              <li><Link to="/services/web-development" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Web Design & Development</Link></li>
-              <li><Link to="/services/mobile-development" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Mobile App Development</Link></li>
-              <li><Link to="/services/software-development" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Software Development</Link></li>
-              <li><Link to="/services/digital-marketing" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Digital Marketing</Link></li>
-              <li><Link to="/services/erp-crm" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Custom ERP/CRM Development</Link></li>
-              <li><Link to="/services/iot-embedded" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>IoT & Embedded Solutions</Link></li>
-              <li><Link to="/services/seo-branding" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>SEO & Branding</Link></li>
-              <li><Link to="/services/email-marketing" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Email Marketing Services</Link></li>
+              <li><Link to="/services/web-development" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Web Design & Development</Link></li>
+              <li><Link to="/services/mobile-development" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Mobile App Development</Link></li>
+              <li><Link to="/services/software-development" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Software Development</Link></li>
+              <li><Link to="/services/digital-marketing" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Digital Marketing</Link></li>
+              <li><Link to="/services/erp-crm" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Custom ERP/CRM Development</Link></li>
+              <li><Link to="/services/iot-embedded" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>IoT & Embedded Solutions</Link></li>
+              <li><Link to="/services/seo-branding" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>SEO & Branding</Link></li>
+              <li><Link to="/services/email-marketing" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Email Marketing Services</Link></li>
             </ul>
           </div>
 
@@ -80,10 +81,10 @@ const Footer = () => {
           <div className="space-y-6">
             <h3 className={`text-lg font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>Company</h3>
             <ul className="space-y-2">
-              <li><Link to="/about-us" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>About Us</Link></li>
-              <li><Link to="/our-team" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Our Team</Link></li>
-              <li><Link to="/careers" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Careers</Link></li>
-              <li><Link to="/news" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>News</Link></li>
+              <li><Link to="/about-us" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>About Us</Link></li>
+              <li><Link to="/our-team" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Our Team</Link></li>
+              <li><Link to="/careers" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Careers</Link></li>
+              <li><Link to="/news" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>News</Link></li>
             </ul>
           </div>
 
@@ -91,10 +92,10 @@ const Footer = () => {
           <div className="space-y-6">
             <h3 className={`text-lg font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>Resources</h3>
             <ul className="space-y-2">
-              <li><button onClick={handleBlogClick} className={`text-sm hover:text-blue-600 transition-colors text-left ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Blog</button></li>
-              <li><button onClick={handleCaseStudiesClick} className={`text-sm hover:text-blue-600 transition-colors text-left ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Case Studies</button></li>
-              <li><Link to="/documentation" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Documentation</Link></li>
-              <li><Link to="/support-center" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Support Center</Link></li>
+              <li><button onClick={handleBlogClick} className={`text-sm transition-colors text-left ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Blog</button></li>
+              <li><button onClick={handleCaseStudiesClick} className={`text-sm transition-colors text-left ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Case Studies</button></li>
+              <li><Link to="/documentation" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Documentation</Link></li>
+              <li><Link to="/support-center" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Support Center</Link></li>
             </ul>
           </div>
 
@@ -102,10 +103,10 @@ const Footer = () => {
           <div className="space-y-6">
             <h3 className={`text-lg font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>Legal</h3>
             <ul className="space-y-2">
-              <li><Link to="/privacy-policy" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Privacy Policy</Link></li>
-              <li><Link to="/terms-of-service" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Terms of Service</Link></li>
-              <li><Link to="/cookie-policy" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>Cookie Policy</Link></li>
-              <li><Link to="/gdpr-compliance" onClick={scrollToTop} className={`text-sm hover:text-blue-600 transition-colors ${theme === 'dark' ? 'hover:text-blue-400' : ''}`}>GDPR Compliance</Link></li>
+              <li><Link to="/privacy-policy" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Privacy Policy</Link></li>
+              <li><Link to="/terms-of-service" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Terms of Service</Link></li>
+              <li><Link to="/cookie-policy" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>Cookie Policy</Link></li>
+              <li><Link to="/gdpr-compliance" onClick={scrollToTop} className={`text-sm transition-colors ${theme === 'light' ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-blue-400'}`}>GDPR Compliance</Link></li>
             </ul>
           </div>
         </div>
@@ -118,13 +119,13 @@ const Footer = () => {
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex space-x-3">
-                <a href="#" className={`${theme === 'light' ? 'text-gray-400 hover:text-blue-600' : 'text-gray-500 hover:text-blue-400'} transition-colors`}>
+                <a href="#" className={`transition-colors ${theme === 'light' ? 'text-gray-400 hover:text-blue-600' : 'text-gray-500 hover:text-blue-400'}`}>
                   <Twitter className="h-5 w-5" />
                 </a>
-                <a href="#" className={`${theme === 'light' ? 'text-gray-400 hover:text-blue-600' : 'text-gray-500 hover:text-blue-400'} transition-colors`}>
+                <a href="#" className={`transition-colors ${theme === 'light' ? 'text-gray-400 hover:text-blue-600' : 'text-gray-500 hover:text-blue-400'}`}>
                   <Instagram className="h-5 w-5" />
                 </a>
-                <a href="#" className={`${theme === 'light' ? 'text-gray-400 hover:text-blue-600' : 'text-gray-500 hover:text-blue-400'} transition-colors`}>
+                <a href="#" className={`transition-colors ${theme === 'light' ? 'text-gray-400 hover:text-blue-600' : 'text-gray-500 hover:text-blue-400'}`}>
                   <Linkedin className="h-5 w-5" />
                 </a>
               </div>
