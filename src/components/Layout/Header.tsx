@@ -26,7 +26,6 @@ const Header = () => {
 
   const scrollToSection = (sectionId: string) => {
     if (location.pathname !== '/') {
-      // Navigate to home page first, then scroll
       navigate('/');
       setTimeout(() => {
         const element = document.getElementById(sectionId);
@@ -43,16 +42,22 @@ const Header = () => {
     setIsMenuOpen(false);
   };
 
+  const handleHomeClick = () => {
+    if (location.pathname === '/') {
+      scrollToSection('hero-section');
+    } else {
+      navigate('/');
+    }
+  };
+
   const handleAboutClick = () => {
     scrollToSection('about-section');
   };
 
   const handleReviewsClick = () => {
     if (location.pathname === '/reviews') {
-      // If already on reviews page, scroll to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Navigate to reviews page
       navigate('/reviews');
     }
     setIsMenuOpen(false);
@@ -60,7 +65,6 @@ const Header = () => {
 
   const handleNewsClick = () => {
     navigate('/news');
-    // Scroll to top after navigation
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);
@@ -75,7 +79,6 @@ const Header = () => {
   const handleNavClick = (itemName: string, action: () => void) => {
     setActiveNavItem(itemName);
     action();
-    // Reset active state after animation
     setTimeout(() => {
       setActiveNavItem(null);
     }, 300);
@@ -87,7 +90,7 @@ const Header = () => {
   };
 
   const navItems = [
-    { name: 'Home', path: '/', action: () => scrollToSection('hero-section') },
+    { name: 'Home', path: '/', action: handleHomeClick },
     { name: 'About', path: '/about-us', action: handleAboutClick },
     { name: 'Services', path: '/services', action: () => scrollToSection('services-section') },
     { name: 'Portfolio', path: '/portfolio', action: () => scrollToSection('portfolio-section') },
@@ -114,7 +117,6 @@ const Header = () => {
     const isClicked = activeNavItem === itemName;
     
     if (isClicked) {
-      // Click animation with box and text color change
       const boxColor = theme === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
       const textColor = theme === 'light' ? '#3B82F6' : '#60A5FA';
       return `${baseClass} transform scale-105 shadow-md transition-all duration-300`
@@ -241,7 +243,6 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center space-x-2">
-            {/* Mobile Theme Toggle */}
             <Button
               variant="ghost"
               size="sm"

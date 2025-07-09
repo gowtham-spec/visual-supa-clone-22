@@ -2,39 +2,77 @@
 import React, { lazy, Suspense } from 'react';
 import Layout from '@/components/Layout/Layout';
 import HeroSection from '@/components/Home/HeroSection';
+import MobileOptimizedSkeleton from '@/components/MobileOptimizedSkeleton';
 import { useTheme } from '@/contexts/ThemeContext';
 
-// Lazy load non-critical sections to improve initial page load
-const ServicesSection = lazy(() => import('@/components/Home/ServicesSection'));
-const AboutSection = lazy(() => import('@/components/Home/AboutSection'));
-const PortfolioGrid = lazy(() => import('@/components/Portfolio/PortfolioGrid'));
-const ClientReviews = lazy(() => import('@/components/Home/ClientReviews'));
-const TrustedPartners = lazy(() => import('@/components/Home/TrustedPartners'));
-const FAQSection = lazy(() => import('@/components/Home/FAQSection'));
-const BlogSection = lazy(() => import('@/components/Home/BlogSection'));
-const ContactSection = lazy(() => import('@/components/Home/ContactSection'));
-const SupabaseStatus = lazy(() => import('@/components/SupabaseStatus'));
+// Performance-optimized lazy loading with mobile-first approach
+const ServicesSection = lazy(() => 
+  import('@/components/Home/ServicesSection').then(module => ({
+    default: module.default
+  }))
+);
 
-// Lightweight loading placeholder
-const SectionLoader = () => (
-  <div className="flex justify-center items-center py-16">
-    <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+const AboutSection = lazy(() => 
+  import('@/components/Home/AboutSection').then(module => ({
+    default: module.default
+  }))
+);
+
+const PortfolioGrid = lazy(() => 
+  import('@/components/Portfolio/PortfolioGrid').then(module => ({
+    default: module.default
+  }))
+);
+
+const ClientReviews = lazy(() => 
+  import('@/components/Home/ClientReviews').then(module => ({
+    default: module.default
+  }))
+);
+
+const TrustedPartners = lazy(() => 
+  import('@/components/Home/TrustedPartners').then(module => ({
+    default: module.default
+  }))
+);
+
+const FAQSection = lazy(() => 
+  import('@/components/Home/FAQSection').then(module => ({
+    default: module.default
+  }))
+);
+
+const BlogSection = lazy(() => 
+  import('@/components/Home/BlogSection').then(module => ({
+    default: module.default
+  }))
+);
+
+const ContactSection = lazy(() => 
+  import('@/components/Home/ContactSection').then(module => ({
+    default: module.default
+  }))
+);
+
+const SupabaseStatus = lazy(() => 
+  import('@/components/SupabaseStatus').then(module => ({
+    default: module.default
+  }))
+);
+
+// Mobile-optimized loading components
+const SectionLoader = ({ height = "h-32" }: { height?: string }) => (
+  <div className="py-8">
+    <MobileOptimizedSkeleton height={height} rows={4} />
   </div>
 );
 
 const Index = () => {
   const { theme } = useTheme();
   
-  const scrollToPortfolio = () => {
-    const portfolioSection = document.getElementById('portfolio-section');
-    if (portfolioSection) {
-      portfolioSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <Layout>
-      {/* Supabase Status Indicator - Lazy loaded */}
+      {/* Supabase Status - Non-blocking */}
       <Suspense fallback={null}>
         <div className="fixed top-4 right-4 z-50">
           <SupabaseStatus />
@@ -46,21 +84,21 @@ const Index = () => {
         <HeroSection />
       </section>
       
-      {/* About Section - Below the fold, lazy load */}
+      {/* About Section - Optimized for mobile */}
       <section id="about-section">
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SectionLoader height="h-24" />}>
           <AboutSection />
         </Suspense>
       </section>
       
-      {/* Services Section - Below the fold, lazy load */}
+      {/* Services Section - Mobile-first loading */}
       <section id="services-section">
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SectionLoader height="h-40" />}>
           <ServicesSection />
         </Suspense>
       </section>
       
-      {/* Portfolio Section - Below the fold, lazy load */}
+      {/* Portfolio Section */}
       <section id="portfolio-section" className={`py-16 ${theme === 'light' ? 'bg-background' : 'bg-slate-900'}`}>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -73,36 +111,36 @@ const Index = () => {
             </p>
           </div>
         </div>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SectionLoader height="h-48" />}>
           <PortfolioGrid />
         </Suspense>
       </section>
       
-      {/* Client Reviews - Lazy load */}
-      <Suspense fallback={<SectionLoader />}>
+      {/* Client Reviews */}
+      <Suspense fallback={<SectionLoader height="h-32" />}>
         <ClientReviews />
       </Suspense>
       
-      {/* Trusted Partners - Lazy load */}
-      <Suspense fallback={<SectionLoader />}>
+      {/* Trusted Partners */}
+      <Suspense fallback={<SectionLoader height="h-20" />}>
         <TrustedPartners />
       </Suspense>
       
-      {/* Blog Section - Lazy load */}
+      {/* Blog Section */}
       <section id="blog-section">
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SectionLoader height="h-40" />}>
           <BlogSection />
         </Suspense>
       </section>
       
-      {/* FAQ Section - Lazy load */}
-      <Suspense fallback={<SectionLoader />}>
+      {/* FAQ Section */}
+      <Suspense fallback={<SectionLoader height="h-36" />}>
         <FAQSection />
       </Suspense>
       
-      {/* Contact Section - Lazy load */}
+      {/* Contact Section */}
       <section id="contact-section">
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SectionLoader height="h-48" />}>
           <ContactSection />
         </Suspense>
       </section>
